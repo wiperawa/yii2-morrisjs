@@ -17,29 +17,38 @@ use yii\helpers\Json;
  * @var string $resize
  * @var string $constructor
  * @var integer $gridTextSize
+ * @var array $js_options
  */
-
+/*
 $dataJson = Json::encode($data);
 $yKeysJson = Json::encode($yKeys);
 $labelsJson = Json::encode($labels);
 $lineColorsJson = Json::encode($lineColors);
 $pointFillColorsJson = Json::encode($pointFillColors);
+*/
+$element = $js_options['element'];
+$constructor = $js_options['constructor'];
 
+unset($js_options['constructor']);
 ?>
 
 <div id="<?= $element ?>"></div>
-<?php $this->registerJs("window.{$element} = Morris.{$constructor}({
-    element: '{$element}',
-    data: {$dataJson},
-    xkey: '{$xKey}',
-    ykeys: {$yKeysJson},
-    ymin: '{$yMin}',
-    labels: {$labelsJson},
-    xLabels: '{$xLabels}',
-    hideHover: '{$hideHover}',
-    yLabelFormat: '{$yLabelFormat}',
-    resize: '{$resize}',
-    lineColors: {$lineColorsJson},
-    pointFillColors: {$pointFillColorsJson},
-    gridTextSize: {$gridTextSize}
-  });");
+<?php
+$options = [];
+foreach ($js_options as $key=>$val) {
+    if ($val) {
+        $key = strtolower($key);
+        $options[] = "{$key}:".Json::encode($val);
+    }
+}
+$opt = implode(',',$options);
+$options = Json::encode($js_options);
+$js = <<< JS
+window.{$element} = Morris.{$constructor}({
+  {$opt}  
+});
+
+JS;
+//var_dump($js); die();
+
+$this->registerJs($js);

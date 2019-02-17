@@ -22,7 +22,7 @@ class Base extends Widget
         $viewTitle = $this->getViewTitle();
         $viewOptions = $this->getViewOptions();
 
-        return $this->renderFile(__DIR__ . "/views/{$viewTitle}.php", $viewOptions);
+        return $this->renderFile(__DIR__ . "/views/{$viewTitle}.php", ['js_options' => $viewOptions]);
     }
 
     public function run()
