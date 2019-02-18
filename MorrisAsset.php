@@ -14,6 +14,7 @@ class MorrisAsset extends AssetBundle
     public function init()
     {
         $this->js = YII_DEBUG ? ['morris.js'] : ['morris.min.js'];
+        $this->css = ['morris.css'];
     }
 
 }
